@@ -1,5 +1,5 @@
 
-from typing import Optional
+from typing import Any, Optional
 from pydantic import BaseModel, Field
 from data_classes.cultures import CultureType
 from data_classes.province import Province
@@ -13,13 +13,13 @@ class RequestParameter(BaseModel):
     game: str
     culture: CultureType
     primary_religion_type: ReligionType
-    _primary_religion: None
+    _primary_religion: Any = None
     secondary_religion_type: Optional[ReligionType] = None
-    _secondary_religion: None
+    _secondary_religion: Any = None
     faith_target: int = 0
     alternate_faith_target: int = 0
     current_corruption: float = 0.0
-    governor_modifiers: list[Modifier] = Field(default_factory=lambda x: [])
+    governor_modifiers: list[Modifier] = Field(default_factory=lambda : [])
 
     @property
     def primary_religion(self):

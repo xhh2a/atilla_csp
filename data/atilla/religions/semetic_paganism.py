@@ -1,6 +1,6 @@
-from data_classes.province import Building, BuildingChain
+from data_classes.province import Building, BuildingChain, BuildingLocation
 from data_classes.religions import Religion
-from data_classes.types import AgentType, Location, Modifier, ModifierType, ReligionType, Variable, Edict
+from data_classes.types import AgentType, ModifierLocation, Modifier, ModifierType, ReligionType, VariableType, Edict
 
 
 SemeticPaganism = Religion(
@@ -8,7 +8,7 @@ SemeticPaganism = Religion(
     modifiers=[
         Modifier(
             type=ModifierType.PERCENTAGE,
-            variable=Variable.REPLENISHMENT,
+            variable=VariableType.REPLENISHMENT,
             value=0.05,
         )
     ],
@@ -18,17 +18,17 @@ SemeticPaganism = Religion(
             modifiers=[
                 Modifier(
                     type=ModifierType.PERCENTAGE,
-                    variable = Variable.INDUSTRY,
+                    variable = VariableType.INDUSTRY,
                     value = 0.1,
                 ),
                 Modifier(
                     type=ModifierType.PERCENTAGE,
-                    variable = Variable.COMMERCE,
+                    variable = VariableType.COMMERCE,
                     value = 0.1,
                 ),
                 Modifier(
                     type=ModifierType.FLAT,
-                    variable = Variable.FAITH,
+                    variable = VariableType.FAITH,
                     value = -3
                 )
             ],
@@ -38,88 +38,88 @@ SemeticPaganism = Religion(
             modifiers=[
                 Modifier(
                     type=ModifierType.PERCENTAGE,
-                    variable = Variable.RECRUITMENT_CAPACITY,
+                    variable = VariableType.RECRUITMENT_CAPACITY,
                     value = 1
                 ),
                 Modifier(
                     type=ModifierType.PERCENTAGE,
-                    variable = Variable.REPLENISHMENT,
+                    variable = VariableType.REPLENISHMENT,
                     value = 0.03
                 ),
                 Modifier(
                     type=ModifierType.FLAT,
-                    variable = Variable.FAITH,
+                    variable = VariableType.FAITH,
                     value = 3
                 )
             ],
         )
     ],
-    city_building_chain=[
+    building_chains=[
         Building(
             name="Enclosure of Almaqah",
             modifiers=[
                 Modifier(
                     type=ModifierType.FLAT,
-                    variable = Variable.FOOD,
+                    variable = VariableType.FOOD,
                     value = -125
                 ),
                 Modifier(
                     type=ModifierType.FLAT,
-                    variable = Variable.PUBLIC_ORDER,
+                    variable = VariableType.PUBLIC_ORDER,
                     value = 10
                 ),
                 Modifier(
                     type=ModifierType.FLAT,
-                    variable = Variable.FAITH,
+                    variable = VariableType.FAITH,
                     value = 10
                 ),
                 Modifier(
                     type=ModifierType.FLAT,
-                    variable = Variable.FAITH,
-                    location = Location.ADJACENT,
+                    variable = VariableType.FAITH,
+                    location = ModifierLocation.ADJACENT,
                     value = 1
                 ),
                 Modifier(
                     type=ModifierType.PERCENTAGE,
-                    variable = Variable.FARMING,
-                    value = 1
+                    variable = VariableType.FARMING,
+                    value = 0.4
                 ),
                 Modifier(
                     type=ModifierType.FLAT,
-                    variable = Variable.AGENT_ENABLE,
+                    variable = VariableType.AGENT_ENABLE,
                     value = AgentType.PRIEST
                 ),
                 Modifier(
                     type=ModifierType.FLAT,
-                    variable = Variable.AGENT_CAP,
+                    variable = VariableType.AGENT_CAP,
                     sub_category = AgentType.PRIEST,
                     value = 1
                 ),
             ],
-            chain=BuildingChain.CITY_RELIGION
-        )
-    ],
-    town_building_chain=[
+            chain=BuildingChain.RELIGION_1,
+            building_location=BuildingLocation.CITY
+        ),
         Building(
             name="Large Stelae Field",
             modifiers=[
                 Modifier(
                     type=ModifierType.FLAT,
-                    variable = Variable.PUBLIC_ORDER,
+                    variable = VariableType.PUBLIC_ORDER,
                     value = 6
                 ),
                 Modifier(
                     type=ModifierType.FLAT,
-                    variable = Variable.FOOD,
+                    variable = VariableType.FOOD,
                     value = 30
                 ),
                 Modifier(
                     type=ModifierType.FLAT,
-                    variable = Variable.FAITH,
+                    variable = VariableType.FAITH,
                     value = 7
                 ),
             ],
-            chain=BuildingChain.TOWN_RELIGION,
+            chain=BuildingChain.RELIGION_1,
+            building_location=BuildingLocation.TOWN
         )
     ],
 )

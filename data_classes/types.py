@@ -4,13 +4,14 @@ from typing import Any, Optional
 from pydantic import BaseModel, Field
 
 
-class Variable(str, Enum):
+class VariableType(str, Enum):
     # Core
     FOOD = "food"
     PUBLIC_ORDER = "public_order"
     SANITATION = "sanitation"
     FAITH = "faith"
     ALTERNATE_FAITH = "alternate_faith"
+    GROWTH = "growth"
 
     # Money
     CULTURE = "culture"
@@ -24,6 +25,18 @@ class Variable(str, Enum):
     # Military
     REPLENISHMENT = "replenishment"
     RECRUITMENT_CAPACITY = "recruitment_capacity"
+    GARRISON = "garrison"
+    ROAD = "road"
+
+    # Equipment
+    UNIT_ENABLE = "enable_unit"
+    UNIT_SPEED = "unit_speed"
+    UNIT_MORALE = "unit_morale"
+    UNIT_ARMOR = "unit_armor"
+    UNIT_DEFENSE = "unit_defense"
+    UNIT_ATTACK = "unit_attack"
+    UNIT_DAMAGE = "unit_damage"
+    UNIT_SHIELD = "unit_shield"
 
     # Agent
     AGENT_ENABLE = "enable_agent"
@@ -37,7 +50,7 @@ class ModifierType(str, Enum):
     FERTILITY = "fertility"
 
 
-class Location(str, Enum):
+class ModifierLocation(str, Enum):
     PROVINCE = "province"
     SETTLEMENT = "settlement"
     ADJACENT = "adjacent"
@@ -45,9 +58,9 @@ class Location(str, Enum):
 
 class Modifier(BaseModel):
     type: ModifierType
-    variable: Variable
+    variable: VariableType
     sub_category: Optional[Any] = None  # Not used currently
-    location: Optional[Location] = Location.PROVINCE
+    location: Optional[ModifierLocation] = ModifierLocation.PROVINCE
     value: Any
 
 
@@ -55,6 +68,11 @@ class Edict(BaseModel):
     name: str
     modifiers: list[Modifier] = Field(default_factory=lambda : [])
 
+
+class UnitType(str, Enum):
+    CAVALRY = "cavalry"
+    INFANTRY = "infantry"
+    RANGED = "ranged"
 
 class AgentType(str, Enum):
     PRIEST = "priest"

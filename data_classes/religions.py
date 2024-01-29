@@ -1,13 +1,12 @@
 
 from contextvars import ContextVar
-from dataclasses import Field
 from humps import pascalize
 
-from pydantic import BaseModel
-from configuration import ContextVariableKeys
+from pydantic import BaseModel, Field
+from configuration import ContextVariableKeys, get_context
 from data_classes.province import Building
 
-from data_classes.types import Edict, Modifier, ReligionType, Variable
+from data_classes.types import Edict, Modifier, ReligionType, VariableType
 
 
 
@@ -15,21 +14,20 @@ class Religion(BaseModel):
     religion_type: ReligionType
     modifiers: list[Modifier]
     edicts: list[Edict]
-    city_building_chain: list[Building] = Field(default_factory = lambda : [])
-    town_building_chain: list[Building] = Field(default_factory = lambda : [])
+    building_chains: list[Building] = Field(default_factory = lambda : [])
 
 
 
 def load_religion(religion_type: ReligionType) -> Religion:
     from importlib import import_module
 
-    return import_module(f"data.{ContextVar(ContextVariableKeys.GAME).get()}.religions.{religion_type}.{pascalize(religion_type)}")
+    return getattr(import_module(f"data.{get_context(ContextVariableKeys.GAME)}.religions.{religion_type.value}"), pascalize(religion_type.value))
 
 def _swap_faith(modifier):
-    if modifier.variable == Variable.FAITH:
-        modifier.variable = Variable.ALTERNATE_FAITH
-    elif modifier.variable == Variable.ALTERNATE_FAITH:
-        modifier.variable = Variable.FAITH
+    if modifier.variable == VariableType.FAITH:
+        modifier.variable = VariableType.ALTERNATE_FAITH
+    elif modifier.variable == VariableType.ALTERNATE_FAITH:
+        modifier.variable = VariableType.FAITH
 
 def swap_variable_type_for_secondary_religion(religion: Religion):
     """
@@ -40,9 +38,6 @@ def swap_variable_type_for_secondary_religion(religion: Religion):
     for edict in religion.edicts:
         for modifier in edict.modifiers:
             _swap_faith(modifier)
-    for building in religion.city_building_chain:
-        for modifier in building.modifiers:
-            _swap_faith(modifier)
-    for building in religion.town_building_chain:
+    for building in religion.building_chains:
         for modifier in building.modifiers:
             _swap_faith(modifier)
