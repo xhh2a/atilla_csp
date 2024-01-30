@@ -13,6 +13,10 @@ class VariableType(str, Enum):
     ALTERNATE_FAITH = "alternate_faith"
     GROWTH = "growth"
 
+    # Misc
+    RESEARCH = "research"
+    TRADE_INCOME = "trade_income"
+
     # Money
     CULTURE = "culture"
     COMMERCE = "commerce"
@@ -38,6 +42,7 @@ class VariableType(str, Enum):
     UNIT_ATTACK = "unit_attack"
     UNIT_DAMAGE = "unit_damage"
     UNIT_SHIELD = "unit_shield"
+    UNIT_LEVEL = "unit_level"
 
     # Agent
     AGENT_ENABLE = "enable_agent"
@@ -88,9 +93,11 @@ class UnitType(str, Enum):
     CAVALRY = "cavalry"
     INFANTRY = "infantry"
     RANGED = "ranged"
+    NAVAL = "naval"
 
 
 class AgentType(str, Enum):
+    ALL = "all"
     PRIEST = "priest"
     CHAMPION = "champion"
     SPY = "spy"

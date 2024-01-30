@@ -4,7 +4,7 @@ from funcy import flatten
 from pydantic import BaseModel, Field, model_validator
 from typing import Optional
 
-from data_classes.types import Modifier, ModifierType, VariableType
+from data_classes.types import Modifier, ModifierLocation, ModifierType, VariableType
 
 
 class BuildingChain(str, Enum):
@@ -16,6 +16,13 @@ class BuildingChain(str, Enum):
     FARMING_2 = "farming_2"
     FARMING_3 = "farming_3"
     FARMING_4 = "farming_4"
+    WATERWORKS = "waterworks"
+    TRADE_MARKET = "trade_market"
+    FOOD_MARKET = "food_market"
+    SLAVE_MARKET = "slave_market"
+    RESEARCH = "research"
+    CIVIC_CENTER = "civic_center"
+    PORT = "port"
 
 
 class BuildingLocation(str, Enum):
@@ -66,20 +73,35 @@ class Province(BaseModel):
         current_food: int = 0,
         current_sanitation: int = 0,
     ):
+        local_sanitations = []
+        province_sanitation = current_sanitation
         for settlement in [self.city, *self.towns]:
+            local_sanitation = 0
             for modifier in settlement.modifiers:
                 match modifier.variable:
                     case VariableType.FOOD:
                         current_food += modifier.get_effective_value(self.fertility)
                     case VariableType.SANITATION:
-                        current_sanitation += modifier.get_effective_value(
-                            self.fertility
-                        )
+                        if modifier.location == ModifierLocation.PROVINCE:
+                            province_sanitation += modifier.get_effective_value(
+                                self.fertility
+                            )
+                        else:
+                            local_sanitation += modifier.get_effective_value(
+                                self.fertility
+                            )
                     case VariableType.PUBLIC_ORDER:
                         current_public_order += modifier.get_effective_value(
                             self.fertility
                         )
-        if current_food < 0 or current_sanitation < 0 or current_public_order < 0:
+        if any(
+            [
+                local_sanitation + province_sanitation < 0
+                for local_sanitation in local_sanitations
+            ]
+        ):
+            raise ValueError("Invalid combination")
+        if current_food < 0 or current_public_order < 0:
             raise ValueError("Invalid combination")
         return self
 

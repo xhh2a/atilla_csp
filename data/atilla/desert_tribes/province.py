@@ -1,5 +1,5 @@
 from data_classes.province import Building, BuildingChain, BuildingLocation
-from data_classes.types import Modifier, ModifierType, VariableType
+from data_classes.types import Modifier, ModifierLocation, ModifierType, VariableType
 
 
 BUILDING_CHAINS = [
@@ -8,7 +8,7 @@ BUILDING_CHAINS = [
         modifiers=[
             Modifier(type=ModifierType.FLAT, variable=VariableType.FOOD, value=-30),
             Modifier(
-                type=ModifierType.FLAT, variable=VariableType.SANITATION, value=-1
+                type=ModifierType.FLAT, variable=VariableType.SANITATION, location=ModifierLocation.SETTLEMENT, value=-1
             ),
             Modifier(
                 type=ModifierType.FLAT, variable=VariableType.PUBLIC_ORDER, value=3
