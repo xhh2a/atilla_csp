@@ -11,6 +11,11 @@ class ContextVariableKeys(str, Enum):
     GAME = "game"
     DATA_MODULE = "data_module"
     BUILDING_CHAINS = "building_chains"
+    CITY_BUILDING = "city_building"
+    TOWN_BUILDING = "town_building"
+    PORT_BUILDINGS = "port_buildings"
+    CITY_BUILDING_OPTIONS = "city_building_options"
+    TOWN_BUILDING_OPTIONS = "town_building_options"
 
 
 def setup_context():

@@ -3,6 +3,7 @@ from collections import defaultdict
 from funcy import flatten
 from pydantic import BaseModel, Field, model_validator
 from typing import Optional
+from configuration import ContextVariableKeys, get_context
 
 from data_classes.types import Modifier, ModifierLocation, ModifierType, VariableType
 
@@ -27,6 +28,7 @@ class BuildingChain(str, Enum):
     RESEARCH = "research"
     CIVIC_CENTER = "civic_center"
     PORT = "port"
+    TRADE_RESOURCE = "trade_resource"
 
 
 class BuildingLocation(str, Enum):
@@ -56,11 +58,38 @@ class Settlement(BaseModel):
 
 
 class City(Settlement):
-    total_slots: int = 5
+    total_slots: int = 6
 
+    @model_validator(mode="after")
+    def main_settlement(self):
+        if not any([building.chain == BuildingChain.CITY for building in self.buildings]):
+            self.buildings.append(get_context(ContextVariableKeys.CITY_BUILDING))
+        return self
+
+    @property
+    def possible_buildings(self):
+        if self.has_port and len(self.builings) < 2:
+            return get_context(ContextVariableKeys.PORT_BUILDINGS)
+        if len(self.buildings) >= self.total_slots:
+            return set()
+        return (get_context(ContextVariableKeys.CITY_BUILDING_OPTIONS) + set([self.trade_good_building])) - set(self.buildings)
 
 class Town(Settlement):
-    total_slots: int = 3
+    total_slots: int = 4
+
+    @model_validator(mode="after")
+    def main_settlement(self):
+        if not any([building.chain == BuildingChain.TOWN for building in self.buildings]):
+            self.buildings.append(get_context(ContextVariableKeys.TOWN_BUILDING))
+        return self
+
+    @property
+    def possible_buildings(self):
+        if self.has_port and len(self.builings) < 2:
+            return get_context(ContextVariableKeys.PORT_BUILDINGS)
+        if len(self.buildings) >= self.total_slots:
+            return set()
+        return (get_context(ContextVariableKeys.TOWN_BUILDING_OPTIONS) + set([self.trade_good_building])) - set(self.buildings)
 
 
 class Province(BaseModel):
