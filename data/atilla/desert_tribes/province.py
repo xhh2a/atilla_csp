@@ -8,7 +8,10 @@ BUILDING_CHAINS = [
         modifiers=[
             Modifier(type=ModifierType.FLAT, variable=VariableType.FOOD, value=-30),
             Modifier(
-                type=ModifierType.FLAT, variable=VariableType.SANITATION, location=ModifierLocation.SETTLEMENT, value=-1
+                type=ModifierType.FLAT,
+                variable=VariableType.SANITATION,
+                location=ModifierLocation.SETTLEMENT,
+                value=-1,
             ),
             Modifier(
                 type=ModifierType.FLAT, variable=VariableType.PUBLIC_ORDER, value=3

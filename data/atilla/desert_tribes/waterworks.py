@@ -6,7 +6,12 @@ BUILDING_CHAINS = [
     Building(
         name="Yakhchal",
         modifiers=[
-            Modifier(type=ModifierType.FLAT, variable=VariableType.SANITATION, location=ModifierLocation.SETTLEMENT, value=9),
+            Modifier(
+                type=ModifierType.FLAT,
+                variable=VariableType.SANITATION,
+                location=ModifierLocation.SETTLEMENT,
+                value=9,
+            ),
             Modifier(type=ModifierType.FLAT, variable=VariableType.FOOD, value=90),
         ],
         chain=BuildingChain.WATERWORKS,
@@ -22,8 +27,12 @@ BUILDING_CHAINS = [
                 value=6,
                 location=ModifierLocation.SETTLEMENT,
             ),
-            Modifier(type=ModifierType.FLAT, variable=VariableType.SANITATION,
-                     location=ModifierLocation.PROVINCE, value=7),
+            Modifier(
+                type=ModifierType.FLAT,
+                variable=VariableType.SANITATION,
+                location=ModifierLocation.PROVINCE,
+                value=7,
+            ),
             Modifier(
                 type=ModifierType.FLAT, variable=VariableType.PUBLIC_ORDER, value=7
             ),
@@ -44,7 +53,12 @@ BUILDING_CHAINS = [
                 value=6,
                 location=ModifierLocation.SETTLEMENT,
             ),
-            Modifier(type=ModifierType.FLAT, variable=VariableType.SANITATION, location=ModifierLocation.PROVINCE, value=7),
+            Modifier(
+                type=ModifierType.FLAT,
+                variable=VariableType.SANITATION,
+                location=ModifierLocation.PROVINCE,
+                value=7,
+            ),
             Modifier(
                 type=ModifierType.FLAT, variable=VariableType.PUBLIC_ORDER, value=4
             ),
