@@ -28,7 +28,7 @@ class RequestParameter(BaseModel):
     # faith_target: int = 0
     # alternate_faith_target: int = 0
     # current_corruption: float = 0.0
-    # governor_modifiers: list[Modifier] = Field(default_factory=lambda: [])
+    existing_modifiers: list[Modifier] = Field(default_factory=lambda: [])
 
     @property
     def primary_religion(self):

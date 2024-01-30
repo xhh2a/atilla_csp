@@ -23,7 +23,9 @@ class TradeResource(Enum):
                 type=ModifierType.FLAT, variable=VariableType.PUBLIC_ORDER, value=-4
             ),
             Modifier(
-                type=ModifierType.FLAT, variable=VariableType.SUBSISTENCE, value=160 * 20
+                type=ModifierType.FLAT,
+                variable=VariableType.SUBSISTENCE,
+                value=160 * 20,
             ),
         ],
         chain=BuildingChain.TRADE_RESOURCE,
@@ -44,7 +46,9 @@ class TradeResource(Enum):
                 type=ModifierType.PERCENTAGE, variable=VariableType.COMMERCE, value=0.08
             ),
             Modifier(
-                type=ModifierType.FLAT, variable=VariableType.SUBSISTENCE, value=160 * 12
+                type=ModifierType.FLAT,
+                variable=VariableType.SUBSISTENCE,
+                value=160 * 12,
             ),
         ],
         chain=BuildingChain.TRADE_RESOURCE,
@@ -58,9 +62,7 @@ class TradeResource(Enum):
                 location=ModifierLocation.SETTLEMENT,
                 value=-5,
             ),
-            Modifier(
-                type=ModifierType.FLAT, variable=VariableType.FOOD, value=170
-            ),
+            Modifier(type=ModifierType.FLAT, variable=VariableType.FOOD, value=170),
             Modifier(
                 type=ModifierType.PERCENTAGE, variable=VariableType.COMMERCE, value=0.2
             ),
@@ -82,14 +84,14 @@ class TradeResource(Enum):
             Modifier(
                 type=ModifierType.FLAT, variable=VariableType.PUBLIC_ORDER, value=-4
             ),
-            Modifier(
-                type=ModifierType.FLAT, variable=VariableType.FAITH, value=3
-            ),
+            Modifier(type=ModifierType.FLAT, variable=VariableType.FAITH, value=3),
             Modifier(
                 type=ModifierType.PERCENTAGE, variable=VariableType.CULTURE, value=0.2
             ),
             Modifier(
-                type=ModifierType.PERCENTAGE, variable=VariableType.CONSTRUCTION_COST, value=-0.15
+                type=ModifierType.PERCENTAGE,
+                variable=VariableType.CONSTRUCTION_COST,
+                value=-0.15,
             ),
             Modifier(
                 type=ModifierType.FLAT, variable=VariableType.SUBSISTENCE, value=20 * 8
@@ -134,7 +136,9 @@ class TradeResource(Enum):
                 type=ModifierType.FLAT, variable=VariableType.COMMERCE, value=3000
             ),
             Modifier(
-                type=ModifierType.PERCENTAGE, variable=VariableType.TRADE_INCOME, value=0.15
+                type=ModifierType.PERCENTAGE,
+                variable=VariableType.TRADE_INCOME,
+                value=0.15,
             ),
         ],
         chain=BuildingChain.TRADE_RESOURCE,
@@ -226,9 +230,7 @@ class TradeResource(Enum):
             Modifier(
                 type=ModifierType.FLAT, variable=VariableType.PUBLIC_ORDER, value=5
             ),
-            Modifier(
-                type=ModifierType.FLAT, variable=VariableType.FOOD, value=170
-            ),
+            Modifier(type=ModifierType.FLAT, variable=VariableType.FOOD, value=170),
             Modifier(
                 type=ModifierType.FLAT, variable=VariableType.SUBSISTENCE, value=20 * 10
             ),
@@ -247,11 +249,11 @@ class TradeResource(Enum):
             Modifier(
                 type=ModifierType.FLAT, variable=VariableType.PUBLIC_ORDER, value=9
             ),
+            Modifier(type=ModifierType.FLAT, variable=VariableType.FOOD, value=90),
             Modifier(
-                type=ModifierType.FLAT, variable=VariableType.FOOD, value=90
-            ),
-            Modifier(
-                type=ModifierType.FLAT, variable=VariableType.SUBSISTENCE, value=160 * 10
+                type=ModifierType.FLAT,
+                variable=VariableType.SUBSISTENCE,
+                value=160 * 10,
             ),
         ],
         chain=BuildingChain.TRADE_RESOURCE,
@@ -268,12 +270,8 @@ class TradeResource(Enum):
             Modifier(
                 type=ModifierType.FLAT, variable=VariableType.PUBLIC_ORDER, value=-4
             ),
-            Modifier(
-                type=ModifierType.FLAT, variable=VariableType.FOOD, value=90
-            ),
-            Modifier(
-                type=ModifierType.FLAT, variable=VariableType.INDUSTRY, value=900
-            ),
+            Modifier(type=ModifierType.FLAT, variable=VariableType.FOOD, value=90),
+            Modifier(type=ModifierType.FLAT, variable=VariableType.INDUSTRY, value=900),
             Modifier(
                 type=ModifierType.FLAT, variable=VariableType.SUBSISTENCE, value=160 * 8
             ),
@@ -292,17 +290,13 @@ class TradeResource(Enum):
             Modifier(
                 type=ModifierType.FLAT, variable=VariableType.PUBLIC_ORDER, value=-6
             ),
+            Modifier(type=ModifierType.FLAT, variable=VariableType.ROAD, value=35),
+            Modifier(type=ModifierType.FLAT, variable=VariableType.COMMERCE, value=825),
+            Modifier(type=ModifierType.FLAT, variable=VariableType.GARRISON, value=4),
             Modifier(
-                type=ModifierType.FLAT, variable=VariableType.ROAD, value=35
-            ),
-            Modifier(
-                type=ModifierType.FLAT, variable=VariableType.COMMERCE, value=825
-            ),
-            Modifier(
-                type=ModifierType.FLAT, variable=VariableType.GARRISON, value=4
-            ),
-            Modifier(
-                type=ModifierType.FLAT, variable=VariableType.SUBSISTENCE, value=160 * 14
+                type=ModifierType.FLAT,
+                variable=VariableType.SUBSISTENCE,
+                value=160 * 14,
             ),
         ],
         chain=BuildingChain.PORT,
@@ -316,14 +310,12 @@ class TradeResource(Enum):
                 location=ModifierLocation.SETTLEMENT,
                 value=-5,
             ),
+            Modifier(type=ModifierType.FLAT, variable=VariableType.FOOD, value=90),
+            Modifier(type=ModifierType.FLAT, variable=VariableType.COMMERCE, value=500),
             Modifier(
-                type=ModifierType.FLAT, variable=VariableType.FOOD, value=90
-            ),
-            Modifier(
-                type=ModifierType.FLAT, variable=VariableType.COMMERCE, value=500
-            ),
-            Modifier(
-                type=ModifierType.FLAT, variable=VariableType.SUBSISTENCE, value=160 * 10
+                type=ModifierType.FLAT,
+                variable=VariableType.SUBSISTENCE,
+                value=160 * 10,
             ),
         ],
         chain=BuildingChain.TRADE_RESOURCE,
@@ -340,14 +332,14 @@ class TradeResource(Enum):
             Modifier(
                 type=ModifierType.FLAT, variable=VariableType.PUBLIC_ORDER, value=-4
             ),
-            Modifier(
-                type=ModifierType.FLAT, variable=VariableType.ROAD, value=35
-            ),
+            Modifier(type=ModifierType.FLAT, variable=VariableType.ROAD, value=35),
             Modifier(
                 type=ModifierType.PERCENTAGE, variable=VariableType.COMMERCE, value=0.2
             ),
             Modifier(
-                type=ModifierType.FLAT, variable=VariableType.SUBSISTENCE, value=160 * 16
+                type=ModifierType.FLAT,
+                variable=VariableType.SUBSISTENCE,
+                value=160 * 16,
             ),
         ],
         chain=BuildingChain.TRADE_RESOURCE,

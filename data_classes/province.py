@@ -70,7 +70,9 @@ class City(Settlement):
 
     @model_validator(mode="after")
     def main_settlement(self):
-        if not any([building.chain == BuildingChain.CITY for building in self.buildings]):
+        if not any(
+            [building.chain == BuildingChain.CITY for building in self.buildings]
+        ):
             self.buildings.append(get_context(ContextVariableKeys.CITY_BUILDING))
         return self
 
@@ -80,14 +82,24 @@ class City(Settlement):
             return get_context(ContextVariableKeys.PORT_BUILDINGS)
         elif len(self.buildings) >= self.total_slots:
             return set()
-        return [building for building in [*get_context(ContextVariableKeys.CITY_BUILDING_OPTIONS), *self.trade_good_buildings] if building.chain not in self.existing_building_chains]
+        return [
+            building
+            for building in [
+                *get_context(ContextVariableKeys.CITY_BUILDING_OPTIONS),
+                *self.trade_good_buildings,
+            ]
+            if building.chain not in self.existing_building_chains
+        ]
+
 
 class Town(Settlement):
     total_slots: int = 4
 
     @model_validator(mode="after")
     def main_settlement(self):
-        if not any([building.chain == BuildingChain.TOWN for building in self.buildings]):
+        if not any(
+            [building.chain == BuildingChain.TOWN for building in self.buildings]
+        ):
             self.buildings.append(get_context(ContextVariableKeys.TOWN_BUILDING))
         return self
 
@@ -97,11 +109,19 @@ class Town(Settlement):
             return get_context(ContextVariableKeys.PORT_BUILDINGS)
         elif self.is_complete:
             return set()
-        return [building for building in [*get_context(ContextVariableKeys.TOWN_BUILDING_OPTIONS), *self.trade_good_buildings] if building.chain not in self.existing_building_chains]
+        return [
+            building
+            for building in [
+                *get_context(ContextVariableKeys.TOWN_BUILDING_OPTIONS),
+                *self.trade_good_buildings,
+            ]
+            if building.chain not in self.existing_building_chains
+        ]
 
 
 INCOME_TYPES = VariableType.income_types()
 INCOME_MODIFIERS = VariableType.income_modifiers()
+
 
 class Province(BaseModel):
     fertility: int = 0
@@ -171,14 +191,14 @@ class Province(BaseModel):
         corruption: float = 0.5,
         existing_modifiers=None,
     ):
-        current_income_values = {
-            income_type: 0 for income_type in INCOME_TYPES
-        }
+        current_income_values = {income_type: 0 for income_type in INCOME_TYPES}
         current_income_modifiers = defaultdict(float)
-        all_modifiers = flatten([
-            *(existing_modifiers or []),
-            *[settlement.modifiers for settlement in [self.city, *self.towns]],
-        ])
+        all_modifiers = flatten(
+            [
+                *(existing_modifiers or []),
+                *[settlement.modifiers for settlement in [self.city, *self.towns]],
+            ]
+        )
         for modifier in all_modifiers:
             if modifier.variable in INCOME_TYPES:
                 if modifier.type in {ModifierType.FLAT, ModifierType.FERTILITY}:
@@ -197,10 +217,11 @@ class Province(BaseModel):
                 ] += modifier.get_effective_value(self.fertility)
         resource_income_value = 0
         for income_type, raw_income_value in current_income_values.items():
-            income_percent_modifier = 1.0 + current_income_modifiers.get(income_type, 0.0)
+            income_percent_modifier = 1.0 + current_income_modifiers.get(
+                income_type, 0.0
+            )
             income_percent_modifier += current_income_modifiers.get(
-                VariableType.ALL_INCOME,
-                0.0
+                VariableType.ALL_INCOME, 0.0
             )
             resource_income_value += raw_income_value * income_percent_modifier
         tax_income = resource_income_value * (

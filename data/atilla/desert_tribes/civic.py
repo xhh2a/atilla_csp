@@ -99,21 +99,21 @@ BUILDING_CHAINS = [
         chain=BuildingChain.RESEARCH,
         building_location=BuildingLocation.CITY,
     ),
-    Building(
-        name="Imperial Gardens",
-        modifiers=[
-            Modifier(type=ModifierType.FLAT, variable=VariableType.FOOD, value=-40),
-            Modifier(
-                type=ModifierType.FLAT, variable=VariableType.PUBLIC_ORDER, value=13
-            ),
-            Modifier(type=ModifierType.FLAT, variable=VariableType.CULTURE, value=500),
-            Modifier(
-                type=ModifierType.FLAT, variable=VariableType.AGENT_LEVEL, value=2
-            ),
-        ],
-        chain=BuildingChain.CIVIC_CENTER,
-        building_location=BuildingLocation.CITY,
-    ),
+    # Building(
+    #     name="Imperial Gardens",
+    #     modifiers=[
+    #         Modifier(type=ModifierType.FLAT, variable=VariableType.FOOD, value=-40),
+    #         Modifier(
+    #             type=ModifierType.FLAT, variable=VariableType.PUBLIC_ORDER, value=13
+    #         ),
+    #         Modifier(type=ModifierType.FLAT, variable=VariableType.CULTURE, value=500),
+    #         Modifier(
+    #             type=ModifierType.FLAT, variable=VariableType.AGENT_LEVEL, value=2
+    #         ),
+    #     ],
+    #     chain=BuildingChain.CIVIC_CENTER,
+    #     building_location=BuildingLocation.CITY,
+    # ),
     Building(
         name="Grand Palace",
         modifiers=[

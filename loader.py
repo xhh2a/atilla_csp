@@ -5,7 +5,14 @@ from importlib import import_module
 from configuration import ContextVariableKeys, set_context, setup_context, get_context
 from data_classes.cultures import CultureType
 from data_classes.parameters import RequestParameter
-from data_classes.province import Building, BuildingChain, BuildingLocation, City, Province, Town
+from data_classes.province import (
+    Building,
+    BuildingChain,
+    BuildingLocation,
+    City,
+    Province,
+    Town,
+)
 from data_classes.types import ReligionType
 
 
@@ -38,7 +45,7 @@ def _load_building_chains(request_parameters: RequestParameter) -> list[Building
     main_city_building = None
     city_buildings_options = []
     main_town_building = None
-    town_building_options =[]
+    town_building_options = []
     port_buildings = []
     for building in all_buildings_available:
         building: Building = building
@@ -50,9 +57,15 @@ def _load_building_chains(request_parameters: RequestParameter) -> list[Building
             case BuildingChain.PORT:
                 port_buildings.append(building)
             case _:
-                if building.building_location in { BuildingLocation.CITY, BuildingLocation.ANY }:
+                if building.building_location in {
+                    BuildingLocation.CITY,
+                    BuildingLocation.ANY,
+                }:
                     city_buildings_options.append(building)
-                elif building.building_location in { BuildingLocation.TOWN, BuildingLocation.ANY }:
+                elif building.building_location in {
+                    BuildingLocation.TOWN,
+                    BuildingLocation.ANY,
+                }:
                     town_building_options.append(building)
 
     set_context(ContextVariableKeys.CITY_BUILDING, main_city_building)
@@ -64,6 +77,7 @@ def _load_building_chains(request_parameters: RequestParameter) -> list[Building
 
 if __name__ == "__main__":
     from data.atilla.trade_resources import TradeResource
+
     setup_context()
 
     load_data(
@@ -76,7 +90,7 @@ if __name__ == "__main__":
     province = Province(
         fertility=0,
         city=City(),
-        towns=[Town(trade_good_buildings=[TradeResource.GEMSTONES.value]), Town()]
+        towns=[Town(trade_good_buildings=[TradeResource.GEMSTONES.value]), Town()],
     )
     value = province.get_province_value(
         public_order=-19,
@@ -85,4 +99,3 @@ if __name__ == "__main__":
         tax_rate=1,
         sanitation=2,
     )
-
