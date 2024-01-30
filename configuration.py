@@ -10,15 +10,18 @@ class Configuration(int, Enum):
 class ContextVariableKeys(str, Enum):
     GAME = "game"
     DATA_MODULE = "data_module"
+    BUILDING_CHAINS = "building_chains"
 
 
 def setup_context():
     global __context__
     __context__ = threading.local()
 
+
 def set_context(context_key: ContextVariableKeys, value: Any):
     global __context__
     setattr(__context__, context_key, value)
+
 
 def get_context(context_key: ContextVariableKeys, default: Any = None):
     global __context__

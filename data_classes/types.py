@@ -19,7 +19,8 @@ class VariableType(str, Enum):
     INDUSTRY = "industry"
     FARMING = "farming"
     SUBSISTENCE = "subsistence"
-    INCOME = "income"
+    ALL_INCOME = "income"
+    TAX_RATE = "tax_rate"  # Immigration is basically tax rate.
     CORRUPTION = "corruption"
 
     # Military
@@ -43,6 +44,14 @@ class VariableType(str, Enum):
     AGENT_CAP = "agent_cap"
     AGENT_LEVEL = "agent_level"
 
+    @classmethod
+    def income_types(cls):
+        return {cls.FARMING, cls.CULTURE, cls.COMMERCE, cls.SUBSISTENCE, cls.INDUSTRY}
+
+    @classmethod
+    def income_modifiers(cls):
+        return {cls.ALL_INCOME, cls.TAX_RATE, cls.CORRUPTION}
+
 
 class ModifierType(str, Enum):
     FLAT = "flat"
@@ -63,10 +72,16 @@ class Modifier(BaseModel):
     location: Optional[ModifierLocation] = ModifierLocation.PROVINCE
     value: Any
 
+    def get_effective_value(self, fertility: int):
+        if self.type == ModifierType.FERTILITY:
+            return self.value * fertility
+        else:
+            return self.value
+
 
 class Edict(BaseModel):
     name: str
-    modifiers: list[Modifier] = Field(default_factory=lambda : [])
+    modifiers: list[Modifier] = Field(default_factory=lambda: [])
 
 
 class UnitType(str, Enum):
@@ -74,13 +89,13 @@ class UnitType(str, Enum):
     INFANTRY = "infantry"
     RANGED = "ranged"
 
+
 class AgentType(str, Enum):
     PRIEST = "priest"
     CHAMPION = "champion"
     SPY = "spy"
 
+
 class ReligionType(str, Enum):
     SEMETIC_PAGANISM = "semetic_paganism"
     EASTERN_CHRISTIANITY = "eastern_christianity"
-
-

@@ -1,4 +1,3 @@
-
 from contextvars import ContextVar
 from humps import pascalize
 
@@ -9,25 +8,30 @@ from data_classes.province import Building
 from data_classes.types import Edict, Modifier, ReligionType, VariableType
 
 
-
 class Religion(BaseModel):
     religion_type: ReligionType
     modifiers: list[Modifier]
     edicts: list[Edict]
-    building_chains: list[Building] = Field(default_factory = lambda : [])
-
+    building_chains: list[Building] = Field(default_factory=lambda: [])
 
 
 def load_religion(religion_type: ReligionType) -> Religion:
     from importlib import import_module
 
-    return getattr(import_module(f"data.{get_context(ContextVariableKeys.GAME)}.religions.{religion_type.value}"), pascalize(religion_type.value))
+    return getattr(
+        import_module(
+            f"data.{get_context(ContextVariableKeys.GAME)}.religions.{religion_type.value}"
+        ),
+        pascalize(religion_type.value),
+    )
+
 
 def _swap_faith(modifier):
     if modifier.variable == VariableType.FAITH:
         modifier.variable = VariableType.ALTERNATE_FAITH
     elif modifier.variable == VariableType.ALTERNATE_FAITH:
         modifier.variable = VariableType.FAITH
+
 
 def swap_variable_type_for_secondary_religion(religion: Religion):
     """
