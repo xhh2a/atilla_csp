@@ -12,17 +12,23 @@ from data_classes.types import Modifier
 
 
 class RequestParameter(BaseModel):
-    province: Province
     game: str
     culture: CultureType
     primary_religion_type: ReligionType
     _primary_religion: Any = None
     secondary_religion_type: Optional[ReligionType] = None
     _secondary_religion: Any = None
-    faith_target: int = 0
-    alternate_faith_target: int = 0
-    current_corruption: float = 0.0
-    governor_modifiers: list[Modifier] = Field(default_factory=lambda: [])
+    food: int = 0
+    public_order: int = 0
+    sanitation: int = 0
+    corruption: float = 0.5
+    tax_rate: float = 1.0
+    _best_score: float = 0.0
+    _best_result: Any = None
+    # faith_target: int = 0
+    # alternate_faith_target: int = 0
+    # current_corruption: float = 0.0
+    # governor_modifiers: list[Modifier] = Field(default_factory=lambda: [])
 
     @property
     def primary_religion(self):

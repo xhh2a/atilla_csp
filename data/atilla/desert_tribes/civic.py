@@ -100,18 +100,6 @@ BUILDING_CHAINS = [
         building_location=BuildingLocation.CITY,
     ),
     Building(
-        name="Academy",
-        modifiers=[
-            Modifier(type=ModifierType.FLAT, variable=VariableType.FOOD, value=-80),
-            Modifier(
-                type=ModifierType.PERCENTAGE, variable=VariableType.RESEARCH, value=0.2
-            ),
-            Modifier(type=ModifierType.FLAT, variable=VariableType.CULTURE, value=1250),
-        ],
-        chain=BuildingChain.RESEARCH,
-        building_location=BuildingLocation.CITY,
-    ),
-    Building(
         name="Imperial Gardens",
         modifiers=[
             Modifier(type=ModifierType.FLAT, variable=VariableType.FOOD, value=-40),

@@ -12,7 +12,7 @@ class Religion(BaseModel):
     religion_type: ReligionType
     modifiers: list[Modifier]
     edicts: list[Edict]
-    building_chains: list[Building] = Field(default_factory=lambda: [])
+    building_chains: list[Building] = Field(default_factory=list)
 
 
 def load_religion(religion_type: ReligionType) -> Religion:

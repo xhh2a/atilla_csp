@@ -9,7 +9,7 @@ from data_classes.types import (
 )
 
 
-class TradeResource(Building, Enum):
+class TradeResource(Enum):
     GEMSTONES = Building(
         name="Gem Market",
         modifiers=[

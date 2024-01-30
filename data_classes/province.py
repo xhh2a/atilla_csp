@@ -2,7 +2,7 @@ from enum import Enum
 from collections import defaultdict
 from funcy import flatten
 from pydantic import BaseModel, Field, model_validator
-from typing import Optional
+from typing import Any, Optional
 from configuration import ContextVariableKeys, get_context
 
 from data_classes.types import Modifier, ModifierLocation, ModifierType, VariableType
@@ -40,7 +40,7 @@ class BuildingLocation(str, Enum):
 
 class Building(BaseModel):
     name: str
-    modifiers: list[Modifier] = Field(default_factory=lambda: [])
+    modifiers: list[Modifier] = Field(default_factory=list)
     chain: BuildingChain
     building_location: Optional[BuildingLocation] = BuildingLocation.ANY
 
@@ -48,9 +48,17 @@ class Building(BaseModel):
 class Settlement(BaseModel):
     total_slots: int = 0
     has_port: bool = False
-    trade_good_building: Optional[Building] = None
+    trade_good_buildings: list[Building] = Field(default_factory=list)
     need_garrison: bool = False
-    buildings: Optional[list[Building]] = Field(default_factory=lambda: [])
+    buildings: list[Building] = Field(default_factory=list)
+
+    @property
+    def existing_building_chains(self):
+        return [building.chain for building in self.buildings]
+
+    @property
+    def is_complete(self):
+        return len(self.buildings) >= self.total_slots
 
     @property
     def modifiers(self):
@@ -68,11 +76,11 @@ class City(Settlement):
 
     @property
     def possible_buildings(self):
-        if self.has_port and len(self.builings) < 2:
+        if self.has_port and len(self.buildings) < 2:
             return get_context(ContextVariableKeys.PORT_BUILDINGS)
-        if len(self.buildings) >= self.total_slots:
+        elif len(self.buildings) >= self.total_slots:
             return set()
-        return (get_context(ContextVariableKeys.CITY_BUILDING_OPTIONS) + set([self.trade_good_building])) - set(self.buildings)
+        return [building for building in [*get_context(ContextVariableKeys.CITY_BUILDING_OPTIONS), *self.trade_good_buildings] if building.chain not in self.existing_building_chains]
 
 class Town(Settlement):
     total_slots: int = 4
@@ -85,12 +93,15 @@ class Town(Settlement):
 
     @property
     def possible_buildings(self):
-        if self.has_port and len(self.builings) < 2:
+        if self.has_port and len(self.buildings) < 2:
             return get_context(ContextVariableKeys.PORT_BUILDINGS)
-        if len(self.buildings) >= self.total_slots:
+        elif self.is_complete:
             return set()
-        return (get_context(ContextVariableKeys.TOWN_BUILDING_OPTIONS) + set([self.trade_good_building])) - set(self.buildings)
+        return [building for building in [*get_context(ContextVariableKeys.TOWN_BUILDING_OPTIONS), *self.trade_good_buildings] if building.chain not in self.existing_building_chains]
 
+
+INCOME_TYPES = VariableType.income_types()
+INCOME_MODIFIERS = VariableType.income_modifiers()
 
 class Province(BaseModel):
     fertility: int = 0
@@ -98,9 +109,18 @@ class Province(BaseModel):
     Net fertility from misc sources
     """
     city: City = Field(default_factory=lambda: City())
-    towns: list[Town] = Field(default_factory=lambda: [Town(), Town()])
+    first_town: Town = Field(default_factory=lambda: Town())
+    second_town: Town = Field(default_factory=lambda: Town())
+    _province_sanitation: Any = None
+    _local_sanitation: Any = None
+    _food: Any = None
+    _public_order: Any = None
 
-    def check_basic_constraints(
+    @property
+    def towns(self):
+        return [self.first_town, self.second_town]
+
+    def get_missing_resource(
         self,
         current_public_order: int = 0,
         current_food: int = 0,
@@ -127,41 +147,40 @@ class Province(BaseModel):
                         current_public_order += modifier.get_effective_value(
                             self.fertility
                         )
+
+        self._food = current_food
+        self._public_order = current_public_order
+        self._local_sanitations = local_sanitations
+        self._province_sanitation = province_sanitation
+        if current_food < 0:
+            return VariableType.FOOD
+        if current_public_order < 0:
+            return VariableType.PUBLIC_ORDER
         if any(
             [
                 local_sanitation + province_sanitation < 0
                 for local_sanitation in local_sanitations
             ]
         ):
-            raise ValueError("Invalid combination")
-        if current_food < 0 or current_public_order < 0:
-            raise ValueError("Invalid combination")
-        return self
+            return VariableType.SANITATION
+        return None
 
     def get_province_value(
         self,
-        public_order: int = 0,
-        food: int = 0,
-        sanitation: int = 0,
         tax_rate: float = 1.0,
         corruption: float = 0.5,
         existing_modifiers=None,
     ):
-        self.check_basic_constraints(
-            current_public_order=public_order,
-            current_food=food,
-            current_sanitation=sanitation,
-        )
         current_income_values = {
-            income_type: 0 for income_type in VariableType.income_types
+            income_type: 0 for income_type in INCOME_TYPES
         }
         current_income_modifiers = defaultdict(float)
-        all_modifiers = [
-            *existing_modifiers,
+        all_modifiers = flatten([
+            *(existing_modifiers or []),
             *[settlement.modifiers for settlement in [self.city, *self.towns]],
-        ]
+        ])
         for modifier in all_modifiers:
-            if modifier.variable in VariableType.income_types:
+            if modifier.variable in INCOME_TYPES:
                 if modifier.type in {ModifierType.FLAT, ModifierType.FERTILITY}:
                     current_income_values[
                         modifier.variable
@@ -172,15 +191,16 @@ class Province(BaseModel):
                     ] += modifier.get_effective_value(self.fertility)
                 else:
                     raise RuntimeWarning(f"Invalid modifier type: {modifier.type}")
-            elif modifier.variable in VariableType.income_modifiers:
+            elif modifier.variable in INCOME_MODIFIERS:
                 current_income_modifiers[
                     modifier.variable
                 ] += modifier.get_effective_value(self.fertility)
         resource_income_value = 0
         for income_type, raw_income_value in current_income_values.items():
-            income_percent_modifier = current_income_modifiers.get(income_type, 0.0)
+            income_percent_modifier = 1.0 + current_income_modifiers.get(income_type, 0.0)
             income_percent_modifier += current_income_modifiers.get(
-                VariableType.ALL_INCOME
+                VariableType.ALL_INCOME,
+                0.0
             )
             resource_income_value += raw_income_value * income_percent_modifier
         tax_income = resource_income_value * (
@@ -191,3 +211,7 @@ class Province(BaseModel):
         )
         received_income = tax_income * min(max((1.0 - corruption_rate), 0), 1.0)
         return received_income
+
+    @property
+    def is_complete(self):
+        return all([town.is_complete for town in self.towns]) and self.city.is_complete
