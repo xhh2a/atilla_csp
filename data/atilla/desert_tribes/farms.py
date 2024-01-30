@@ -19,7 +19,7 @@ BUILDING_CHAINS = [
                 type=ModifierType.FERTILITY, variable=VariableType.FARMING, value=80
             ),
         ],
-        chain=BuildingChain.FARMING_1,
+        chain=BuildingChain.FARMING_WHEAT,
         building_location=BuildingLocation.ANY,
     ),
     Building(
@@ -34,7 +34,7 @@ BUILDING_CHAINS = [
             Modifier(type=ModifierType.FLAT, variable=VariableType.FOOD, value=130),
             Modifier(type=ModifierType.FLAT, variable=VariableType.FARMING, value=825),
         ],
-        chain=BuildingChain.FARMING_2,
+        chain=BuildingChain.FARMING_CAMEL,
         building_location=BuildingLocation.ANY,
     ),
     Building(
@@ -59,7 +59,7 @@ BUILDING_CHAINS = [
                 value=0.15,
             ),
         ],
-        chain=BuildingChain.FARMING_3,
+        chain=BuildingChain.FARMING_STABLES,
         building_location=BuildingLocation.ANY,
     ),
     Building(
@@ -78,7 +78,7 @@ BUILDING_CHAINS = [
                 type=ModifierType.FERTILITY, variable=VariableType.FARMING, value=165
             ),
         ],
-        chain=BuildingChain.FARMING_3,
+        chain=BuildingChain.FARMING_SHEEP,
         building_location=BuildingLocation.ANY,
     ),
 ]

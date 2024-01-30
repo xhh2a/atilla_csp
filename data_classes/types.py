@@ -16,6 +16,7 @@ class VariableType(str, Enum):
     # Misc
     RESEARCH = "research"
     TRADE_INCOME = "trade_income"
+    CONSTRUCTION_COST = "construction_cost"
 
     # Money
     CULTURE = "culture"
