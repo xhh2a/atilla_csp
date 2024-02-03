@@ -53,26 +53,6 @@ BUILDING_CHAINS = [
         building_location=BuildingLocation.TOWN,
     ),
     Building(
-        name="Carpet Maker",
-        modifiers=[
-            Modifier(
-                type=ModifierType.FLAT,
-                variable=VariableType.SANITATION,
-                location=ModifierLocation.SETTLEMENT,
-                value=-12,
-            ),
-            Modifier(
-                type=ModifierType.FLAT, variable=VariableType.PUBLIC_ORDER, value=4
-            ),
-            Modifier(type=ModifierType.FLAT, variable=VariableType.FAITH, value=-13),
-            Modifier(
-                type=ModifierType.FLAT, variable=VariableType.INDUSTRY, value=3500
-            ),
-        ],
-        chain=BuildingChain.INDUSTRY_MONEY,
-        building_location=BuildingLocation.CITY,
-    ),
-    Building(
         name="Mosaic Workshop",
         modifiers=[
             Modifier(

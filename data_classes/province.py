@@ -2,8 +2,9 @@ from enum import Enum
 from collections import defaultdict
 from funcy import flatten
 from pydantic import BaseModel, Field, model_validator
-from typing import Any, Optional
+from typing import Annotated, Any, Optional
 from configuration import ContextVariableKeys, get_context
+from warnings import warn
 
 from data_classes.types import Modifier, ModifierLocation, ModifierType, VariableType
 
@@ -48,9 +49,9 @@ class Building(BaseModel):
 class Settlement(BaseModel):
     total_slots: int = 0
     has_port: bool = False
-    trade_good_buildings: list[Building] = Field(default_factory=list)
+    trade_good_buildings: Annotated[list[Building], Field(default_factory=list)]
+    buildings: Annotated[list[Building], Field(default_factory=lambda: [])]
     need_garrison: bool = False
-    buildings: list[Building] = Field(default_factory=list)
 
     @property
     def existing_building_chains(self):
@@ -70,10 +71,13 @@ class City(Settlement):
 
     @model_validator(mode="after")
     def main_settlement(self):
-        if not any(
+        main_city_building = get_context(ContextVariableKeys.CITY_BUILDING)
+        if main_city_building is not None and not any(
             [building.chain == BuildingChain.CITY for building in self.buildings]
         ):
             self.buildings.append(get_context(ContextVariableKeys.CITY_BUILDING))
+        else:
+            warn("City object initialized before data was loaded for a specific faction. Consider saving inputs as a dict until after loading")
         return self
 
     @property
@@ -97,10 +101,13 @@ class Town(Settlement):
 
     @model_validator(mode="after")
     def main_settlement(self):
-        if not any(
+        main_town_building = get_context(ContextVariableKeys.TOWN_BUILDING)
+        if main_town_building is not None and not any(
             [building.chain == BuildingChain.TOWN for building in self.buildings]
         ):
-            self.buildings.append(get_context(ContextVariableKeys.TOWN_BUILDING))
+            self.buildings.append(main_town_building)
+        else:
+            warn("Town object initialized before data was loaded for a specific faction. Consider saving inputs as a dict until after loading")
         return self
 
     @property

@@ -29,7 +29,7 @@ BUILDING_CHAINS = [
     #         ),
     #     ],
     #     chain=BuildingChain.FARMING_WHEAT,
-    #     building_location=BuildingLocation.ANY,
+    #     building_location=BuildingLocation.TOWN,
     # ),
     Building(
         name="Camel Ranch",
@@ -47,7 +47,7 @@ BUILDING_CHAINS = [
             Modifier(type=ModifierType.FLAT, variable=VariableType.FARMING, value=825),
         ],
         chain=BuildingChain.FARMING_CAMEL,
-        building_location=BuildingLocation.ANY,
+        building_location=BuildingLocation.TOWN,
     ),
     # Building(
     #     name="Nisean Stables",
@@ -75,7 +75,7 @@ BUILDING_CHAINS = [
     #         ),
     #     ],
     #     chain=BuildingChain.FARMING_STABLES,
-    #     building_location=BuildingLocation.ANY,
+    #     building_location=BuildingLocation.TOWN,
     # ),
     Building(
         name="Sheep Barn",
@@ -94,6 +94,6 @@ BUILDING_CHAINS = [
             ),
         ],
         chain=BuildingChain.FARMING_SHEEP,
-        building_location=BuildingLocation.ANY,
+        building_location=BuildingLocation.TOWN,
     ),
 ]

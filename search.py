@@ -6,10 +6,10 @@ from configuration import ContextVariableKeys, get_context
 import data_classes
 from data_classes.parameters import RequestParameter
 from collections import namedtuple
-from data_classes.province import Province
+from data_classes.province import Building, BuildingChain, BuildingLocation, Province
 from itertools import combinations
 from funcy import group_by
-from data_classes.types import Modifier, ModifierType, VariableType
+from data_classes.types import AgentType, Modifier, ModifierLocation, ModifierType, VariableType
 
 import loader
 
@@ -24,6 +24,7 @@ def _iterative_depth_first_search(
     fringe: list[Province],
     current_element: Province,
     evaluated: list[Any],
+    name: str
 ):
     province: Province = current_element
     if province.is_complete:
@@ -51,7 +52,7 @@ def _iterative_depth_first_search(
                 building.name for building in request._best_result.second_town.buildings
             ]
             print(
-                f"Best Result Score: {value}\n{city_buildings}\n{first_town}\n{second_town}"
+                f"Found new Result for {name} Score: {value}\n{city_buildings}\n{first_town}\n{second_town}"
             )
     else:
         city = province.city
@@ -134,153 +135,30 @@ def _iterative_depth_first_search(
                         fringe.append(copy_province)
 
 
-def depth_first_search(request, province_callback, output_location: Path = None):
-    print(f"Starting Search for {output_location}")
+def depth_first_search(request, province_args, output_location: Path = None):
+    print(f"Starting Search for {output_location} {province_args}")
     if output_location is not None and output_location.exists():
+        print(f"Cached results already exist for {output_location}, delete the file if you want to rerun")
         return
     start_time = arrow.now()
     # TODO: Use a priority queue multiple workers and greedy algorithm
     loader.setup_context()
 
     loader.load_data(request)
+    request._best_result = None
+    request._best_score = 0.0
 
     fringe = deque([])
     evaluated = []
-    fringe.append(province_callback())
+    fringe.append(Province(**province_args))
     while fringe:
-        _iterative_depth_first_search(request, fringe, fringe.pop(), evaluated)
+        _iterative_depth_first_search(request, fringe, fringe.pop(), evaluated, output_location)
     end_time = arrow.now()
-    print(f"Completed Search in {end_time - start_time} {start_time.humanize()}")
+    print(f"Completed Search in {end_time - start_time} {start_time.humanize()} for {output_location}")
     print(f"Writing results to {output_location}")
     print(request._best_result.json())
     print(request._best_score)
     if output_location is not None:
-        Path(output_location).open("w").write(request._best_result.json(indent=4))
+        Path(output_location).open("w").write(request._best_result.model_dump_json(indent=4))
     return request._best_result
 
-
-if __name__ == "__main__":
-    from data.atilla.trade_resources import TradeResource
-    from data_classes.cultures import CultureType
-    from data_classes.types import ReligionType
-
-    from data_classes.province import Town, City
-
-    loader.setup_context()
-
-    garama_faction = RequestParameter(
-        game="atilla",
-        culture=CultureType.DESERT_TRIBES,
-        primary_religion_type=ReligionType.SEMETIC_PAGANISM,
-        public_order=-19,
-        food=0,
-        sanitation=2,
-        corruption=0.25,
-        tax_rate=1,
-    )
-
-    garama_with_edict = RequestParameter(
-        game="atilla",
-        culture=CultureType.DESERT_TRIBES,
-        primary_religion_type=ReligionType.SEMETIC_PAGANISM,
-        public_order=-19,
-        food=0,
-        sanitation=2,
-        corruption=0.35,
-        tax_rate=1,
-        existing_modifiers=[
-            Modifier(
-                type=ModifierType.PERCENTAGE, variable=VariableType.COMMERCE, value=0.1
-            ),
-            Modifier(
-                type=ModifierType.PERCENTAGE, variable=VariableType.INDUSTRY, value=0.1
-            ),
-        ],
-    )
-
-    # Sahara
-    depth_first_search(
-        garama_faction,
-        province_callback=lambda: Province(
-            fertility=0,
-            city=City(),
-            first_town=Town(trade_good_buildings=[TradeResource.GEMSTONES.value]),
-        ),
-        output_location=Path("./results/garama/sahara.json"),
-    )
-
-    # Carthage
-    depth_first_search(
-        garama_faction,
-        province_callback=lambda: Province(
-            fertility=3,
-            city=City(has_port=True),
-            first_town=Town(
-                trade_good_buildings=[
-                    TradeResource.MARBLE_CULTURE.value,
-                    TradeResource.MARBLE_INDUSTRY.value,
-                ]
-            ),
-            second_town=Town(has_port=True),
-        ),
-        output_location=Path("./results/garama/carthage.json"),
-    )
-
-    # Mauretania
-    depth_first_search(
-        garama_faction,
-        province_callback=lambda: Province(
-            fertility=3,
-            city=City(has_port=True),
-            first_town=Town(
-                has_port=True, trade_good_buildings=[TradeResource.TIMBER.value]
-            ),
-            second_town=Town(has_port=True),
-        ),
-        output_location=Path("./results/garama/mauretania.json"),
-    )
-
-    # Tripolitana
-    depth_first_search(
-        garama_faction,
-        province_callback=lambda: Province(
-            fertility=1,
-            city=City(has_port=True),
-            first_town=Town(
-                has_port=True, trade_good_buildings=[TradeResource.DYES.value]
-            ),
-            second_town=Town(has_port=True),
-        ),
-        output_location=Path("./results/garama/tripolitana.json"),
-    )
-
-    # Libya
-    depth_first_search(
-        garama_faction,
-        province_callback=lambda: Province(
-            fertility=1,
-            city=City(
-                has_port=True, trade_good_buildings=[TradeResource.OLIVE_OIL.value]
-            ),
-            first_town=Town(has_port=True),
-            second_town=Town(),
-        ),
-        output_location=Path("./results/garama/libya.json"),
-    )
-
-    # Egypt
-    depth_first_search(
-        garama_with_edict,
-        province_callback=lambda: Province(
-            fertility=3,
-            city=City(has_port=True),
-            first_town=Town(has_port=True),
-            second_town=Town(
-                trade_good_buildings=[
-                    TradeResource.GOLD_COMMERCE.value,
-                    TradeResource.GOLD_INDUSTRY.value,
-                ]
-            ),
-        ),
-        output_location=Path("./results/garama/egypt.json"),
-    )

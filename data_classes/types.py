@@ -69,6 +69,7 @@ class ModifierLocation(str, Enum):
     PROVINCE = "province"
     SETTLEMENT = "settlement"
     ADJACENT = "adjacent"
+    GLOBAL = "global"
 
 
 class Modifier(BaseModel):
