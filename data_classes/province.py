@@ -22,6 +22,8 @@ class BuildingChain(str, Enum):
     INDUSTRY_CULTURE = "industry_culture"
     INDUSTRY_COMMERCE = "industry_commerce"
     INDUSTRY_MONEY = "industry_money"
+    INDUSTRY_RANGED = "industry_ranged"
+    INDUSTRY_ARMOR = "industry_armor"
     WATERWORKS = "waterworks"
     TRADE_MARKET = "trade_market"
     FOOD_MARKET = "food_market"
@@ -76,7 +78,7 @@ class City(Settlement):
             [building.chain == BuildingChain.CITY for building in self.buildings]
         ):
             self.buildings.append(get_context(ContextVariableKeys.CITY_BUILDING))
-        else:
+        if main_city_building is None:
             warn("City object initialized before data was loaded for a specific faction. Consider saving inputs as a dict until after loading")
         return self
 
@@ -106,7 +108,7 @@ class Town(Settlement):
             [building.chain == BuildingChain.TOWN for building in self.buildings]
         ):
             self.buildings.append(main_town_building)
-        else:
+        if main_town_building is None:
             warn("Town object initialized before data was loaded for a specific faction. Consider saving inputs as a dict until after loading")
         return self
 
@@ -174,6 +176,7 @@ class Province(BaseModel):
                         current_public_order += modifier.get_effective_value(
                             self.fertility
                         )
+            local_sanitations.append(local_sanitation)
 
         self._food = current_food
         self._public_order = current_public_order

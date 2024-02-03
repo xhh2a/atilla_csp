@@ -80,7 +80,8 @@ if __name__ == "__main__":
                     ],
                 ),
                 second_town=dict(
-                    trade_good_buildings=[
+                    total_slots=3,
+                    buildings=[
                         TradeResource.IRON_MONEY.value,
                     ]
                 ),
@@ -98,7 +99,7 @@ if __name__ == "__main__":
                 total_slots=5,
                 buildings=[
                     Building(
-                    name="Imperial Palace",
+                        name="Imperial Palace",
                         modifiers=[
                             Modifier(type=ModifierType.FLAT, variable=VariableType.FOOD, value=-160),
                             Modifier(type=ModifierType.FLAT, variable=VariableType.PUBLIC_ORDER, value=16),
@@ -119,7 +120,7 @@ if __name__ == "__main__":
                         ],
                         chain=BuildingChain.CIVIC_CENTER,
                         building_location=BuildingLocation.CITY,
-                    )
+                    ),
                 ],
             ),
             first_town=dict(trade_good_buildings=[TradeResource.GEMSTONES.value]),
@@ -134,7 +135,8 @@ if __name__ == "__main__":
             fertility=2,
             city=dict(has_port=True),
             first_town=dict(
-                has_port=True, trade_good_buildings=[TradeResource.TIMBER.value]
+                total_slots=3,
+                has_port=True, buildings=[TradeResource.TIMBER.value]
             ),
             second_town=dict(has_port=True),
         ),
@@ -210,7 +212,22 @@ if __name__ == "__main__":
         request=garama_faction,
         province_args=dict(
             fertility=1,
-            city=dict(),
+            city=dict(
+                total_slots=5,
+                buildings=[
+                    Building(
+                        name="Cloca",
+                        modifiers=[
+                            Modifier(type=ModifierType.FLAT, variable=VariableType.SUBSISTENCE, value=-200),
+                            Modifier(type=ModifierType.FLAT, variable=VariableType.SANITATION, location=ModifierLocation.SETTLEMENT, value=12),
+                            Modifier(type=ModifierType.FLAT, variable=VariableType.SANITATION, location=ModifierLocation.PROVINCE, value=6),
+                            Modifier(type=ModifierType.FLAT, variable=VariableType.GROWTH, value=13),
+                        ],
+                        chain=BuildingChain.WATERWORKS,
+                        building_location=BuildingLocation.CITY,
+                    ),
+                ],
+            ),
             first_town=dict(),
             second_town=dict(
                 has_port=True,
@@ -221,6 +238,22 @@ if __name__ == "__main__":
             ),
         ),
         output_location=Path("./results/garama/baetica.json"),
+    ))
+
+    # Carthagenesis
+    searches.append(dict(
+        request=garama_faction,
+        province_args=dict(
+            fertility=1,
+            city=dict(has_port=True),
+            first_town=dict(),
+            second_town=dict(
+                trade_good_buildings=[
+                    TradeResource.OLIVE_OIL.value,
+                ]
+            ),
+        ),
+        output_location=Path("./results/garama/carthagenesis.json"),
     ))
 
     def parallelism(search_arguments):

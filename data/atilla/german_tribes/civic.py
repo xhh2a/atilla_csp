@@ -1,54 +1,57 @@
+from enum import Enum
 from data_classes.province import Building, BuildingChain, BuildingLocation
 from data_classes.types import (
     AgentType,
     Modifier,
     ModifierType,
+    UnitType,
     VariableType,
     ModifierLocation,
 )
 
 
-BUILDING_CHAINS = [
-    Building(
-        name="Oriental Market",
+class GermanCivicBuildings(Enum):
+    TRADE_MARKET = Building(
+        name="Amber Market",
         modifiers=[
             Modifier(
                 type=ModifierType.FLAT,
                 variable=VariableType.SANITATION,
                 location=ModifierLocation.SETTLEMENT,
-                value=-6,
+                value=-4,
             ),
             Modifier(
                 type=ModifierType.FLAT, variable=VariableType.PUBLIC_ORDER, value=-4
             ),
             Modifier(
-                type=ModifierType.FLAT, variable=VariableType.COMMERCE, value=2000
+                type=ModifierType.FLAT, variable=VariableType.COMMERCE, value=2500
             ),
-            Modifier(type=ModifierType.FLAT, variable=VariableType.ROAD, value=25),
+            Modifier(type=ModifierType.FLAT, variable=VariableType.ROAD, value=30),
             Modifier(
-                type=ModifierType.PERCENTAGE, variable=VariableType.COMMERCE, value=0.15
+                type=ModifierType.FLAT,
+                variable=VariableType.AGENT_ENABLE,
+                value=AgentType.SPY,
             ),
         ],
         chain=BuildingChain.TRADE_MARKET,
         building_location=BuildingLocation.CITY,
-    ),
-    Building(
-        name="Food Market",
+    )
+    FOOD_MARKET = Building(
+        name="Fairground",
         modifiers=[
             Modifier(
                 type=ModifierType.FLAT,
                 variable=VariableType.SANITATION,
                 location=ModifierLocation.SETTLEMENT,
-                value=-6,
+                value=-4,
             ),
             Modifier(
                 type=ModifierType.FLAT, variable=VariableType.PUBLIC_ORDER, value=-4
             ),
-            Modifier(type=ModifierType.FLAT, variable=VariableType.FOOD, value=90),
-            Modifier(type=ModifierType.FLAT, variable=VariableType.COMMERCE, value=400),
-            Modifier(type=ModifierType.FLAT, variable=VariableType.ROAD, value=20),
+            Modifier(type=ModifierType.FLAT, variable=VariableType.FOOD, value=60),
+            Modifier(type=ModifierType.FLAT, variable=VariableType.COMMERCE, value=1000),
             Modifier(
-                type=ModifierType.PERCENTAGE, variable=VariableType.FARMING, value=0.15
+                type=ModifierType.PERCENTAGE, variable=VariableType.ALL_INCOME, value=0.1
             ),
             Modifier(
                 type=ModifierType.FLAT,
@@ -58,15 +61,15 @@ BUILDING_CHAINS = [
         ],
         chain=BuildingChain.FOOD_MARKET,
         building_location=BuildingLocation.CITY,
-    ),
-    Building(
+    )
+    SLAVE_MARKET = Building(
         name="Slave Market",
         modifiers=[
             Modifier(
                 type=ModifierType.FLAT,
                 variable=VariableType.SANITATION,
                 location=ModifierLocation.SETTLEMENT,
-                value=-6,
+                value=-4,
             ),
             Modifier(
                 type=ModifierType.FLAT, variable=VariableType.PUBLIC_ORDER, value=-4
@@ -74,7 +77,6 @@ BUILDING_CHAINS = [
             Modifier(
                 type=ModifierType.FLAT, variable=VariableType.COMMERCE, value=1450
             ),
-            Modifier(type=ModifierType.FLAT, variable=VariableType.ROAD, value=20),
             Modifier(
                 type=ModifierType.PERCENTAGE, variable=VariableType.INDUSTRY, value=0.15
             ),
@@ -86,116 +88,91 @@ BUILDING_CHAINS = [
         ],
         chain=BuildingChain.SLAVE_MARKET,
         building_location=BuildingLocation.CITY,
-    ),
-    Building(
-        name="Academy",
+    )
+    ACADEMY = Building(
+        name="Hall of Elders",
         modifiers=[
-            Modifier(type=ModifierType.FLAT, variable=VariableType.FOOD, value=-80),
+            Modifier(type=ModifierType.FLAT, variable=VariableType.FOOD, value=-100),
             Modifier(
-                type=ModifierType.PERCENTAGE, variable=VariableType.RESEARCH, value=0.2
+                type=ModifierType.PERCENTAGE, variable=VariableType.RESEARCH, value=0.15
             ),
-            Modifier(type=ModifierType.FLAT, variable=VariableType.CULTURE, value=1250),
+            Modifier(type=ModifierType.FLAT, variable=VariableType.PUBLIC_ORDER, value=9),
+            Modifier(type=ModifierType.FLAT, variable=VariableType.CULTURE, value=825),
         ],
         chain=BuildingChain.RESEARCH,
         building_location=BuildingLocation.CITY,
-    ),
-    # Building(
-    #     name="Imperial Gardens",
-    #     modifiers=[
-    #         Modifier(type=ModifierType.FLAT, variable=VariableType.FOOD, value=-40),
-    #         Modifier(
-    #             type=ModifierType.FLAT, variable=VariableType.PUBLIC_ORDER, value=13
-    #         ),
-    #         Modifier(type=ModifierType.FLAT, variable=VariableType.CULTURE, value=500),
-    #         Modifier(
-    #             type=ModifierType.FLAT, variable=VariableType.AGENT_LEVEL, value=2
-    #         ),
-    #     ],
-    #     chain=BuildingChain.CIVIC_CENTER,
-    #     building_location=BuildingLocation.CITY,
-    # ),
-    Building(
-        name="Grand Palace",
+    )
+    CITY_CIVIC_CENTER = Building(
+        name="Communal Grounds",
         modifiers=[
-            Modifier(type=ModifierType.FLAT, variable=VariableType.FOOD, value=-80),
+            Modifier(type=ModifierType.FLAT, variable=VariableType.FOOD, value=-100),
             Modifier(
                 type=ModifierType.FLAT, variable=VariableType.PUBLIC_ORDER, value=13
             ),
-            Modifier(type=ModifierType.FLAT, variable=VariableType.CULTURE, value=1200),
-            Modifier(
-                type=ModifierType.PERCENTAGE, variable=VariableType.TAX_RATE, value=0.1
-            ),
+            Modifier(type=ModifierType.FLAT, variable=VariableType.CULTURE, value=825),
+            Modifier(type=ModifierType.FLAT, variable=VariableType.UNIT_LEVEL, sub_category=UnitType.LAND, value=1),
             Modifier(
                 type=ModifierType.FLAT,
                 variable=VariableType.AGENT_ENABLE,
                 value=AgentType.CHAMPION,
             ),
+            Modifier(
+                type=ModifierType.FLAT,
+                variable=VariableType.RECRUITMENT_CAPACITY,
+                value=1
+            ),
         ],
         chain=BuildingChain.CIVIC_CENTER,
         building_location=BuildingLocation.CITY,
-    ),
-    Building(
-        name="Majore Field",
+    )
+    CITY_PUBLIC_ORDER = Building(
+        name="Mead Hall",
         modifiers=[
             Modifier(type=ModifierType.FLAT, variable=VariableType.FOOD, value=-100),
             Modifier(
                 type=ModifierType.FLAT,
                 variable=VariableType.SANITATION,
                 location=ModifierLocation.SETTLEMENT,
-                value=-4,
+                value=-6,
             ),
             Modifier(
                 type=ModifierType.PERCENTAGE,
                 variable=VariableType.PUBLIC_ORDER,
-                value=21,
+                value=22,  # 5 from 30% immigration penalty
             ),
-            Modifier(type=ModifierType.FLAT, variable=VariableType.CULTURE, value=825),
+            Modifier(type=ModifierType.FLAT, variable=VariableType.CULTURE, value=1650),
         ],
         chain=BuildingChain.CIVIC_CENTER,
         building_location=BuildingLocation.CITY,
-    ),
-    Building(
-        name="Caravanserai",
+    )
+    TOWN_CIVIC_CENTER = Building(
+        name="Chieftain's Keep",
         modifiers=[
-            Modifier(type=ModifierType.FLAT, variable=VariableType.FOOD, value=-40),
-            Modifier(
-                type=ModifierType.FLAT,
-                variable=VariableType.SANITATION,
-                location=ModifierLocation.SETTLEMENT,
-                value=-4,
-            ),
+            Modifier(type=ModifierType.FLAT, variable=VariableType.FOOD, value=-100),
             Modifier(
                 type=ModifierType.FLAT,
                 variable=VariableType.PUBLIC_ORDER,
-                value=-4,
+                value=13,
             ),
             Modifier(
-                type=ModifierType.FLAT, variable=VariableType.COMMERCE, value=1250
+                type=ModifierType.FLAT, variable=VariableType.CULTURE, value=825
+            ),
+            Modifier(type=ModifierType.FLAT, variable=VariableType.UNIT_LEVEL, sub_category=UnitType.LAND, value=1),
+            Modifier(
+                type=ModifierType.FLAT,
+                variable=VariableType.AGENT_ENABLE,
+                value=AgentType.CHAMPION,
             ),
             Modifier(
-                type=ModifierType.PERCENTAGE,
-                variable=VariableType.TRADE_INCOME,
-                value=0.03,
-            ),
-            Modifier(type=ModifierType.FLAT, variable=VariableType.COMMERCE, value=0.2),
-        ],
-        chain=BuildingChain.CIVIC_CENTER,
-        building_location=BuildingLocation.TOWN,
-    ),
-    Building(
-        name="Governor's Palace",
-        modifiers=[
-            Modifier(type=ModifierType.FLAT, variable=VariableType.FOOD, value=-40),
-            Modifier(
-                type=ModifierType.PERCENTAGE,
-                variable=VariableType.PUBLIC_ORDER,
-                value=-9,
-            ),
-            Modifier(
-                type=ModifierType.FLAT, variable=VariableType.TAX_RATE, value=0.06
+                type=ModifierType.FLAT,
+                variable=VariableType.RECRUITMENT_CAPACITY,
+                value=1
             ),
         ],
         chain=BuildingChain.CIVIC_CENTER,
         building_location=BuildingLocation.TOWN,
-    ),
+    )
+
+BUILDING_CHAINS = [
+    building.value for building in GermanCivicBuildings
 ]

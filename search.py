@@ -54,6 +54,7 @@ def _iterative_depth_first_search(
             print(
                 f"Found new Result for {name} Score: {value}\n{city_buildings}\n{first_town}\n{second_town}"
             )
+            evaluated.append(f"Result for {name} Score: {value}\n{city_buildings}\n{first_town}\n{second_town}")
     else:
         city = province.city
         if not city.is_complete:
@@ -160,5 +161,6 @@ def depth_first_search(request, province_args, output_location: Path = None):
     print(request._best_score)
     if output_location is not None:
         Path(output_location).open("w").write(request._best_result.model_dump_json(indent=4))
+        Path(output_location.parent() / output_location.name.replace(".json", "_log.txt")).open('w').write("\n".join(evaluated))
     return request._best_result
 

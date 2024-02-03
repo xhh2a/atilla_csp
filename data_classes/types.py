@@ -44,6 +44,7 @@ class VariableType(str, Enum):
     UNIT_DAMAGE = "unit_damage"
     UNIT_SHIELD = "unit_shield"
     UNIT_LEVEL = "unit_level"
+    UNIT_AMMO = "unit_ammo"
 
     # Agent
     AGENT_ENABLE = "enable_agent"
@@ -96,6 +97,7 @@ class UnitType(str, Enum):
     INFANTRY = "infantry"
     RANGED = "ranged"
     NAVAL = "naval"
+    LAND = "land"
 
 
 class AgentType(str, Enum):
@@ -108,3 +110,4 @@ class AgentType(str, Enum):
 class ReligionType(str, Enum):
     SEMETIC_PAGANISM = "semetic_paganism"
     EASTERN_CHRISTIANITY = "eastern_christianity"
+    GERMANIC_PAGANISM = "germanic_paganism"
