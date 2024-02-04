@@ -1,7 +1,7 @@
 from typing import Any, Optional
 from pydantic import BaseModel, Field
 from data_classes.cultures import CultureType
-from data_classes.province import Province
+from data_classes.province import Building, Province
 from humps import pascalize
 from data_classes.religions import (
     ReligionType,
@@ -29,6 +29,7 @@ class RequestParameter(BaseModel):
     # alternate_faith_target: int = 0
     # current_corruption: float = 0.0
     existing_modifiers: list[Modifier] = Field(default_factory=lambda: [])
+    additional_buildings: list[Building] = Field(default_factory=list)
 
     @property
     def primary_religion(self):

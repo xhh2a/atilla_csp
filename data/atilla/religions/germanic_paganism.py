@@ -11,7 +11,7 @@ from data_classes.types import (
 )
 
 
-SemeticPaganism = Religion(
+GermanicPaganism = Religion(
     religion_type=ReligionType.GERMANIC_PAGANISM,
     modifiers=[
         Modifier(

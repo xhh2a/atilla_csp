@@ -1,3 +1,4 @@
+from enum import Enum
 from data_classes.province import Building, BuildingChain, BuildingLocation
 from data_classes.types import (
     AgentType,
@@ -8,8 +9,8 @@ from data_classes.types import (
 )
 
 
-BUILDING_CHAINS = [
-    Building(
+class DesertCivicBuildings(Enum):
+    TRADE_MARKET = Building(
         name="Oriental Market",
         modifiers=[
             Modifier(
@@ -28,11 +29,16 @@ BUILDING_CHAINS = [
             Modifier(
                 type=ModifierType.PERCENTAGE, variable=VariableType.COMMERCE, value=0.15
             ),
+            Modifier(
+                type=ModifierType.FLAT,
+                variable=VariableType.AGENT_ENABLE,
+                value=AgentType.SPY,
+            ),
         ],
         chain=BuildingChain.TRADE_MARKET,
         building_location=BuildingLocation.CITY,
-    ),
-    Building(
+    )
+    FOOD_MARKET = Building(
         name="Food Market",
         modifiers=[
             Modifier(
@@ -58,8 +64,8 @@ BUILDING_CHAINS = [
         ],
         chain=BuildingChain.FOOD_MARKET,
         building_location=BuildingLocation.CITY,
-    ),
-    Building(
+    )
+    SLAVE_MARKET = Building(
         name="Slave Market",
         modifiers=[
             Modifier(
@@ -86,8 +92,8 @@ BUILDING_CHAINS = [
         ],
         chain=BuildingChain.SLAVE_MARKET,
         building_location=BuildingLocation.CITY,
-    ),
-    Building(
+    )
+    ACADEMY = Building(
         name="Academy",
         modifiers=[
             Modifier(type=ModifierType.FLAT, variable=VariableType.FOOD, value=-80),
@@ -98,7 +104,7 @@ BUILDING_CHAINS = [
         ],
         chain=BuildingChain.RESEARCH,
         building_location=BuildingLocation.CITY,
-    ),
+    )
     # Building(
     #     name="Imperial Gardens",
     #     modifiers=[
@@ -114,7 +120,7 @@ BUILDING_CHAINS = [
     #     chain=BuildingChain.CIVIC_CENTER,
     #     building_location=BuildingLocation.CITY,
     # ),
-    Building(
+    CITY_CIVIC_CENTER = Building(
         name="Grand Palace",
         modifiers=[
             Modifier(type=ModifierType.FLAT, variable=VariableType.FOOD, value=-80),
@@ -133,8 +139,8 @@ BUILDING_CHAINS = [
         ],
         chain=BuildingChain.CIVIC_CENTER,
         building_location=BuildingLocation.CITY,
-    ),
-    Building(
+    )
+    CITY_PUBLIC_ORDER = Building(
         name="Majore Field",
         modifiers=[
             Modifier(type=ModifierType.FLAT, variable=VariableType.FOOD, value=-100),
@@ -153,8 +159,8 @@ BUILDING_CHAINS = [
         ],
         chain=BuildingChain.CIVIC_CENTER,
         building_location=BuildingLocation.CITY,
-    ),
-    Building(
+    )
+    TOWN_MARKET = Building(
         name="Caravanserai",
         modifiers=[
             Modifier(type=ModifierType.FLAT, variable=VariableType.FOOD, value=-40),
@@ -181,8 +187,8 @@ BUILDING_CHAINS = [
         ],
         chain=BuildingChain.CIVIC_CENTER,
         building_location=BuildingLocation.TOWN,
-    ),
-    Building(
+    )
+    TOWN_CIVIC_CENTER = Building(
         name="Governor's Palace",
         modifiers=[
             Modifier(type=ModifierType.FLAT, variable=VariableType.FOOD, value=-40),
@@ -197,5 +203,60 @@ BUILDING_CHAINS = [
         ],
         chain=BuildingChain.CIVIC_CENTER,
         building_location=BuildingLocation.TOWN,
-    ),
+    )
+    CITY_CAPITAL = Building(
+        name="Imperial Palace",
+        modifiers=[
+            Modifier(type=ModifierType.FLAT, variable=VariableType.FOOD, value=-160),
+            Modifier(type=ModifierType.FLAT, variable=VariableType.PUBLIC_ORDER, value=16),
+            Modifier(type=ModifierType.FLAT, variable=VariableType.PUBLIC_ORDER, location=ModifierLocation.GLOBAL, value=1),
+            Modifier(type=ModifierType.FLAT, variable=VariableType.CULTURE, value=2500),
+            Modifier(type=ModifierType.PERCENTAGE, variable=VariableType.TAX_RATE, value=0.18),
+            Modifier(
+                type=ModifierType.FLAT,
+                variable=VariableType.AGENT_ENABLE,
+                value=AgentType.CHAMPION,
+            ),
+            Modifier(
+                type=ModifierType.FLAT,
+                variable=VariableType.AGENT_CAP,
+                sub_category=AgentType.CHAMPION,
+                value=1
+            ),
+        ],
+        chain=BuildingChain.CIVIC_CENTER,
+        building_location=BuildingLocation.CITY,
+    )
+    AKSUM_MARKET = Building(
+        name="Royal Mint",
+        modifiers=[
+            Modifier(
+                type=ModifierType.FLAT,
+                variable=VariableType.SANITATION,
+                location=ModifierLocation.SETTLEMENT,
+                value=-8,
+            ),
+            Modifier(
+                type=ModifierType.FLAT, variable=VariableType.PUBLIC_ORDER, value=-6
+            ),
+            Modifier(
+                type=ModifierType.FLAT, variable=VariableType.COMMERCE, value=2200
+            ),
+            Modifier(type=ModifierType.FLAT, variable=VariableType.ROAD, value=25),
+            Modifier(
+                type=ModifierType.PERCENTAGE, variable=VariableType.COMMERCE, value=0.18
+            ),
+            Modifier(
+                type=ModifierType.FLAT,
+                variable=VariableType.AGENT_ENABLE,
+                value=AgentType.SPY,
+            ),
+        ],
+        chain=BuildingChain.TRADE_MARKET,
+        building_location=BuildingLocation.CITY,
+    )
+
+BUILDING_CHAINS = [
+    building.value for building in DesertCivicBuildings
+    if building not in [DesertCivicBuildings.CITY_CAPITAL, DesertCivicBuildings.AKSUM_MARKET]
 ]

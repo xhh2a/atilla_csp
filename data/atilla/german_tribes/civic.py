@@ -172,7 +172,41 @@ class GermanCivicBuildings(Enum):
         chain=BuildingChain.CIVIC_CENTER,
         building_location=BuildingLocation.TOWN,
     )
+    TOWN_CAPITAL = Building(
+        name="Chieftain's Castle",
+        modifiers=[
+            Modifier(type=ModifierType.FLAT, variable=VariableType.FOOD, value=-150),
+            Modifier(
+                type=ModifierType.FLAT,
+                variable=VariableType.PUBLIC_ORDER,
+                value=16,
+            ),
+            Modifier(
+                type=ModifierType.FLAT, variable=VariableType.CULTURE, value=1500
+            ),
+            Modifier(type=ModifierType.FLAT, variable=VariableType.UNIT_LEVEL, sub_category=UnitType.LAND, value=2),
+            Modifier(
+                type=ModifierType.FLAT,
+                variable=VariableType.AGENT_ENABLE,
+                value=AgentType.CHAMPION,
+            ),
+            Modifier(
+                type=ModifierType.FLAT,
+                variable=VariableType.AGENT_CAP,
+                sub_category=AgentType.CHAMPION,
+                value=1,
+            ),
+            Modifier(
+                type=ModifierType.FLAT,
+                variable=VariableType.RECRUITMENT_CAPACITY,
+                value=2
+            ),
+        ],
+        chain=BuildingChain.CIVIC_CENTER,
+        building_location=BuildingLocation.TOWN,
+    )
 
 BUILDING_CHAINS = [
     building.value for building in GermanCivicBuildings
+    if building not in [GermanCivicBuildings.TOWN_CAPITAL]
 ]

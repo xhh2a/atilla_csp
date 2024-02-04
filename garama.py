@@ -1,3 +1,4 @@
+from data.atilla.desert_tribes.civic import DesertCivicBuildings
 from data.atilla.trade_resources import TradeResource
 from data_classes.cultures import CultureType
 from data_classes.types import ReligionType
@@ -67,7 +68,6 @@ if __name__ == "__main__":
                 fertility=2,
                 city=dict(),
                 first_town=dict(
-                    total_slots=3,
                     buildings=[
                         Building(
                             name="Military Port",
@@ -80,7 +80,6 @@ if __name__ == "__main__":
                     ],
                 ),
                 second_town=dict(
-                    total_slots=3,
                     buildings=[
                         TradeResource.IRON_MONEY.value,
                     ]
@@ -96,31 +95,8 @@ if __name__ == "__main__":
         province_args=dict(
             fertility=0,
             city=dict(
-                total_slots=5,
                 buildings=[
-                    Building(
-                        name="Imperial Palace",
-                        modifiers=[
-                            Modifier(type=ModifierType.FLAT, variable=VariableType.FOOD, value=-160),
-                            Modifier(type=ModifierType.FLAT, variable=VariableType.PUBLIC_ORDER, value=16),
-                            Modifier(type=ModifierType.FLAT, variable=VariableType.PUBLIC_ORDER, location=ModifierLocation.GLOBAL, value=1),
-                            Modifier(type=ModifierType.FLAT, variable=VariableType.CULTURE, value=2500),
-                            Modifier(type=ModifierType.PERCENTAGE, variable=VariableType.TAX_RATE, value=0.18),
-                            Modifier(
-                                type=ModifierType.FLAT,
-                                variable=VariableType.AGENT_ENABLE,
-                                value=AgentType.CHAMPION,
-                            ),
-                            Modifier(
-                                type=ModifierType.FLAT,
-                                variable=VariableType.AGENT_CAP,
-                                sub_category=AgentType.CHAMPION,
-                                value=1
-                            ),
-                        ],
-                        chain=BuildingChain.CIVIC_CENTER,
-                        building_location=BuildingLocation.CITY,
-                    ),
+                    DesertCivicBuildings.CITY_CAPITAL.value,
                 ],
             ),
             first_town=dict(trade_good_buildings=[TradeResource.GEMSTONES.value]),
@@ -135,8 +111,8 @@ if __name__ == "__main__":
             fertility=2,
             city=dict(has_port=True),
             first_town=dict(
-                total_slots=3,
-                has_port=True, buildings=[TradeResource.TIMBER.value]
+                has_port=True,
+                buildings=[TradeResource.TIMBER.value]
             ),
             second_town=dict(has_port=True),
         ),
@@ -213,7 +189,6 @@ if __name__ == "__main__":
         province_args=dict(
             fertility=1,
             city=dict(
-                total_slots=5,
                 buildings=[
                     Building(
                         name="Cloca",
@@ -254,6 +229,23 @@ if __name__ == "__main__":
             ),
         ),
         output_location=Path("./results/garama/carthagenesis.json"),
+    ))
+
+    # Terraconesis
+    searches.append(dict(
+        request=garama_faction,
+        province_args=dict(
+            fertility=0,
+            city=dict(has_port=True),
+            first_town=dict(),
+            second_town=dict(
+                trade_good_buildings=[
+                    TradeResource.MARBLE_CULTURE.value,
+                    TradeResource.MARBLE_INDUSTRY.value,
+                ]
+            ),
+        ),
+        output_location=Path("./results/garama/terraconesis.json"),
     ))
 
     def parallelism(search_arguments):

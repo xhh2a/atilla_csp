@@ -1,3 +1,4 @@
+from enum import Enum
 from data_classes.province import Building, BuildingChain, BuildingLocation
 from data_classes.types import (
     ModifierLocation,
@@ -7,9 +8,8 @@ from data_classes.types import (
     ModifierType,
 )
 
-
-BUILDING_CHAINS = [
-    Building(
+class DesertIndustryBuildings(Enum):
+    CONSTRUCTION = Building(
         name="Builder's Workshop",
         modifiers=[
             Modifier(
@@ -32,8 +32,8 @@ BUILDING_CHAINS = [
         ],
         chain=BuildingChain.INDUSTRY_CONSTRUCTION,
         building_location=BuildingLocation.TOWN,
-    ),
-    Building(
+    )
+    MONEY = Building(
         name="Carpet Maker",
         modifiers=[
             Modifier(
@@ -51,8 +51,8 @@ BUILDING_CHAINS = [
         ],
         chain=BuildingChain.INDUSTRY_MONEY,
         building_location=BuildingLocation.TOWN,
-    ),
-    Building(
+    )
+    CULTURE = Building(
         name="Mosaic Workshop",
         modifiers=[
             Modifier(
@@ -73,8 +73,8 @@ BUILDING_CHAINS = [
         ],
         chain=BuildingChain.INDUSTRY_CULTURE,
         building_location=BuildingLocation.CITY,
-    ),
-    Building(
+    )
+    COMMERCE = Building(
         name="Adobe Kiln",
         modifiers=[
             Modifier(
@@ -93,7 +93,34 @@ BUILDING_CHAINS = [
                 type=ModifierType.FLAT, variable=VariableType.COMMERCE, value=1250
             ),
         ],
-        chain=BuildingChain.INDUSTRY_CULTURE,
+        chain=BuildingChain.INDUSTRY_COMMERCE,
         building_location=BuildingLocation.CITY,
-    ),
+    )
+    PLEASURE = Building(
+        name="1000 Pleasures",
+        modifiers=[
+            Modifier(
+                type=ModifierType.FLAT,
+                variable=VariableType.SANITATION,
+                location=ModifierLocation.SETTLEMENT,
+                value=-12,
+            ),
+            Modifier(
+                type=ModifierType.FLAT, variable=VariableType.PUBLIC_ORDER, value=4
+            ),
+            Modifier(
+                type=ModifierType.FLAT, variable=VariableType.INDUSTRY, value=3500
+            ),
+            Modifier(
+                type=ModifierType.FLAT, variable=VariableType.FAITH, value=-13
+            ),
+        ],
+        chain=BuildingChain.INDUSTRY_PLEASURE,
+        building_location=BuildingLocation.CITY,
+    )
+
+
+BUILDING_CHAINS = [
+    building.value for building in DesertIndustryBuildings
+    if building not in [DesertIndustryBuildings.PLEASURE]
 ]

@@ -66,10 +66,11 @@ def _iterative_depth_first_search(
                 ]
                 if building.chain not in city.existing_building_chains
             ]
-            desired_slots = city.total_slots - 1
+            desired_slots = city.free_slots
             if city.has_port:
                 desired_slots -= 1
             for combination in combinations(possible_city_buildings, desired_slots):
+                print(f"searching {combination}")
                 if (
                     max(
                         len(v)
@@ -106,7 +107,7 @@ def _iterative_depth_first_search(
                     ]
                     if building.chain not in town.existing_building_chains
                 ]
-                desired_slots = town.total_slots - 1
+                desired_slots = town.free_slots
                 if town.has_port:
                     desired_slots -= 1
                 for combination in combinations(possible_town_buildings, desired_slots):
@@ -161,6 +162,6 @@ def depth_first_search(request, province_args, output_location: Path = None):
     print(request._best_score)
     if output_location is not None:
         Path(output_location).open("w").write(request._best_result.model_dump_json(indent=4))
-        Path(output_location.parent() / output_location.name.replace(".json", "_log.txt")).open('w').write("\n".join(evaluated))
+        Path(Path(output_location).parent / output_location.name.replace(".json", "_log.txt")).open('w').write("\n".join(evaluated))
     return request._best_result
 

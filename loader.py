@@ -39,6 +39,7 @@ def _load_building_chains(request_parameters: RequestParameter) -> list[Building
             if request_parameters.secondary_religion
             else []
         ),
+        *request_parameters.additional_buildings,
     ]
     set_context(ContextVariableKeys.BUILDING_CHAINS, all_buildings_available)
     # Cache settlement building

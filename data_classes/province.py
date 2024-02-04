@@ -24,6 +24,7 @@ class BuildingChain(str, Enum):
     INDUSTRY_MONEY = "industry_money"
     INDUSTRY_RANGED = "industry_ranged"
     INDUSTRY_ARMOR = "industry_armor"
+    INDUSTRY_PLEASURE = "industry_pleasure"
     WATERWORKS = "waterworks"
     TRADE_MARKET = "trade_market"
     FOOD_MARKET = "food_market"
@@ -56,12 +57,16 @@ class Settlement(BaseModel):
     need_garrison: bool = False
 
     @property
+    def free_slots(self):
+        return self.total_slots - len(self.buildings)
+
+    @property
     def existing_building_chains(self):
         return [building.chain for building in self.buildings]
 
     @property
     def is_complete(self):
-        return len(self.buildings) >= self.total_slots
+        return self.free_slots == 0
 
     @property
     def modifiers(self):
