@@ -70,7 +70,6 @@ def _iterative_depth_first_search(
             if city.has_port:
                 desired_slots -= 1
             for combination in combinations(possible_city_buildings, desired_slots):
-                print(f"searching {combination}")
                 if (
                     max(
                         len(v)

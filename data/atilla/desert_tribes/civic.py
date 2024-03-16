@@ -255,8 +255,18 @@ class DesertCivicBuildings(Enum):
         chain=BuildingChain.TRADE_MARKET,
         building_location=BuildingLocation.CITY,
     )
+    HIMYAR_DAM = Building(
+        name="The Ma'rib Dam",
+        modifiers=[
+            Modifier(
+                type=ModifierType.FLAT, variable=VariableType.SUBSISTENCE, value=500
+            ),
+        ],
+        chain=BuildingChain.WONDER,
+        building_location=BuildingLocation.CITY,
+    )
 
 BUILDING_CHAINS = [
     building.value for building in DesertCivicBuildings
-    if building not in [DesertCivicBuildings.CITY_CAPITAL, DesertCivicBuildings.AKSUM_MARKET]
+    if building not in [DesertCivicBuildings.CITY_CAPITAL, DesertCivicBuildings.AKSUM_MARKET, DesertCivicBuildings.HIMYAR_DAM]
 ]

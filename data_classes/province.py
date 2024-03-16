@@ -33,6 +33,7 @@ class BuildingChain(str, Enum):
     CIVIC_CENTER = "civic_center"
     PORT = "port"
     TRADE_RESOURCE = "trade_resource"
+    WONDER = "wonder"
 
 
 class BuildingLocation(str, Enum):

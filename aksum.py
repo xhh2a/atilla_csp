@@ -41,6 +41,11 @@ if __name__ == "__main__":
         sanitation=2,
         corruption=0.25,
         tax_rate=1,
+        existing_modifiers=[
+            Modifier(
+                type=ModifierType.PERCENTAGE, variable=VariableType.FARMING, value=0.3
+            ),
+        ],
     )
 
     searches = []
@@ -70,18 +75,151 @@ if __name__ == "__main__":
     )
 
     # Arabia Felix
-    # searches.append(dict(
-    #     request=aksum_faction,
-    #     province_args=dict(
-    #         fertility=0,
-    #         city=dict(
-    #             trade_good_buildings=[TradeResource.TIMBER.value]
-    #         ),
-    #         first_town=dict(),
-    #         second_town=dict(),
-    #     ),
-    #     output_location=Path("./results/atilla/aksum/arabia_felix.json"),
-    # ))
+    searches.append(dict(
+        request=aksum_faction,
+        province_args=dict(
+            fertility=4,
+            city=dict(
+                buildings=[
+                    DesertCivicBuildings.HIMYAR_DAM.value
+                ],
+                trade_good_buildings=[TradeResource.LEAD.value],
+            ),
+            first_town=dict(has_port=True),
+            second_town=dict(
+                buildings=[TradeResource.SPICES.value]
+            ),
+        ),
+        output_location=Path("./results/atilla/aksum/arabia_felix.json"),
+    ))
+
+    # Arabia Magna
+    searches.append(dict(
+        request=aksum_faction,
+        province_args=dict(
+            fertility=0,
+            city=dict(
+                trade_good_buildings=[TradeResource.IRON_MONEY.value]
+            ),
+            first_town=dict(),
+            second_town=dict(),
+        ),
+        output_location=Path("./results/atilla/aksum/arabia_magna.json"),
+    ))
+
+    # Egypt
+    searches.append(dict(
+        request=aksum_faction,
+        province_args=dict(
+            fertility=2,
+            city=dict(has_port=True),
+            first_town=dict(has_port=True),
+            second_town=dict(
+                trade_good_buildings=[
+                    TradeResource.GOLD_COMMERCE.value,
+                    TradeResource.GOLD_INDUSTRY.value,
+                ]
+            ),
+        ),
+        output_location=Path("./results/atilla/aksum/egypt.json"),
+    ))
+
+    # Palestine
+    searches.append(dict(
+        request=aksum_faction,
+        province_args=dict(
+            fertility=0,
+            city=dict(),
+            first_town=dict(
+                buildings=[
+                    DesertIndustryBuildings.PLEASURE.value,
+                ],
+            ),
+            second_town=dict(
+                has_port=True,
+                buildings=[
+                    DesertIndustryBuildings.PLEASURE.value,
+                ],
+                trade_good_buildings=[
+                    TradeResource.GEMSTONES.value,
+                ]
+            ),
+        ),
+        output_location=Path("./results/atilla/aksum/palestine.json"),
+    ))
+
+    # Asoristan
+    searches.append(dict(
+        request=aksum_faction,
+        province_args=dict(
+            fertility=0,
+            city=dict(),
+            first_town=dict(
+                buildings=[
+                    TradeResource.MARBLE_INDUSTRY.value,
+                ],
+            ),
+            second_town=dict(
+                buildings=[
+                    TradeResource.SPICES.value,
+                ],
+            ),
+        ),
+        output_location=Path("./results/atilla/aksum/asoristan.json"),
+    ))
+
+    # Armenia
+    searches.append(dict(
+        request=aksum_faction,
+        province_args=dict(
+            fertility=0,
+            city=dict(),
+            first_town=dict(
+                trade_good_buildings=[
+                    TradeResource.TIMBER.value,
+                ],
+            ),
+            second_town=dict(
+            ),
+        ),
+        output_location=Path("./results/atilla/aksum/armenia.json"),
+    ))
+
+    # Caucasia
+    searches.append(dict(
+        request=aksum_faction,
+        province_args=dict(
+            fertility=0,
+            city=dict(),
+            first_town=dict(
+                trade_good_buildings=[
+                    TradeResource.SILK.value,
+                ],
+            ),
+            second_town=dict(
+            ),
+        ),
+        output_location=Path("./results/atilla/aksum/caucasia.json"),
+    ))
+
+    # Persis
+    searches.append(dict(
+        request=aksum_faction,
+        province_args=dict(
+            fertility=0,
+            city=dict(),
+            first_town=dict(
+                has_port=True,
+                trade_good_buildings=[
+                    TradeResource.DYES.value,
+                ],
+            ),
+            second_town=dict(
+            ),
+        ),
+        output_location=Path("./results/atilla/aksum/persis.json"),
+    ))
+
 
     def parallelism(search_arguments):
         return depth_first_search(**search_arguments)

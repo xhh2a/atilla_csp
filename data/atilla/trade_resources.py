@@ -162,7 +162,7 @@ class TradeResource(Enum):
         chain=BuildingChain.TRADE_RESOURCE,
     )
     LEAD = Building(
-        name="Deep Gold Mine",
+        name="Glass Workshop",
         modifiers=[
             Modifier(
                 type=ModifierType.FLAT,
